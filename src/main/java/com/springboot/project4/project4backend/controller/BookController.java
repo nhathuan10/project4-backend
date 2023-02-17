@@ -25,4 +25,25 @@ public class BookController {
     public ResponseEntity<List<BookDto>> getAllBooks(){
         return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
     }
+
+    @GetMapping("/categories/{categoryId}/books")
+    public ResponseEntity<List<BookDto>> getBooksByCategoryId(@PathVariable("categoryId") long categoryId){
+        return new ResponseEntity<>(bookService.getBooksByCategoryId(categoryId), HttpStatus.OK);
+    }
+
+    @GetMapping("/books/{id}")
+    public ResponseEntity<BookDto> getBookById(@PathVariable("id") long id){
+        return new ResponseEntity<>(bookService.getBookById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/books/{id}")
+    public ResponseEntity<BookDto> updateBook(@PathVariable("id") long id, @RequestBody BookDto bookDto){
+        return new ResponseEntity<>(bookService.updateBook(id, bookDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/books/{id}")
+    public ResponseEntity<String> deleteBook(@PathVariable("id") long id){
+        bookService.deleteBook(id);
+        return new ResponseEntity<>("Book deleted successfully", HttpStatus.OK);
+    }
 }

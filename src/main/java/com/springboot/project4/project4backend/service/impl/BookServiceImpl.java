@@ -33,4 +33,36 @@ public class BookServiceImpl implements BookService {
         List<Book> books = bookRepository.findAll();
         return books.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
     }
+
+    @Override
+    public List<BookDto> getBooksByCategoryId(long categoryId) {
+        List<Book> books = bookRepository.findByCategoryId(categoryId);
+        return books.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public BookDto getBookById(long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+        return BookMapper.mapToDto(book);
+    }
+
+    @Override
+    public BookDto updateBook(long id, BookDto bookDto) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+        book.setTitle(bookDto.getTitle());
+        book.setAuthor(bookDto.getAuthor());
+        book.setDescription(bookDto.getDescription());
+        book.setCopies(bookDto.getCopies());
+        book.setCopiesAvailable(bookDto.getCopiesAvailable());
+        Category category = categoryRepository.findById(bookDto.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookDto.getCategoryId()));
+        book.setCategory(category);
+        book.setImg(bookDto.getImg());
+        Book savedBook = bookRepository.save(book);
+        return BookMapper.mapToDto(savedBook);
+    }
+
+    @Override
+    public void deleteBook(long id) {
+        bookRepository.deleteById(id);
+    }
 }
