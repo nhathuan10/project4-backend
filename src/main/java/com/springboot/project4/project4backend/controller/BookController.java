@@ -36,9 +36,9 @@ public class BookController {
         return new ResponseEntity<>(bookService.getBookById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/books/{id}")
-    public ResponseEntity<BookDto> updateBook(@PathVariable("id") long id, @RequestBody BookDto bookDto){
-        return new ResponseEntity<>(bookService.updateBook(id, bookDto), HttpStatus.OK);
+    @PutMapping("categories/{categoryId}/books/{id}")
+    public ResponseEntity<BookDto> updateBook(@PathVariable("categoryId") long categoryId, @PathVariable("id") long id, @RequestBody BookDto bookDto){
+        return new ResponseEntity<>(bookService.updateBook(categoryId, id, bookDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/books/{id}")

@@ -19,5 +19,5 @@ public class BookDto {
     private int copies;
     private int copiesAvailable;
     private String img;
-    private long categoryId;
+    private String categoryName;
 }

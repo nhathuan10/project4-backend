@@ -13,7 +13,7 @@ public class BookMapper {
                 .copies(book.getCopies())
                 .copiesAvailable(book.getCopiesAvailable())
                 .img(book.getImg())
-                .categoryId(book.getCategory().getId())
+                .categoryName(book.getCategory().getName())
                 .build();
     }
 

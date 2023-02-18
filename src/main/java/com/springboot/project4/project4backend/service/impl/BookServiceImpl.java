@@ -47,14 +47,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateBook(long id, BookDto bookDto) {
+    public BookDto updateBook(long categoryId, long id, BookDto bookDto) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setDescription(bookDto.getDescription());
         book.setCopies(bookDto.getCopies());
         book.setCopiesAvailable(bookDto.getCopiesAvailable());
-        Category category = categoryRepository.findById(bookDto.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Category", "id", bookDto.getCategoryId()));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
         book.setCategory(category);
         book.setImg(bookDto.getImg());
         Book savedBook = bookRepository.save(book);
