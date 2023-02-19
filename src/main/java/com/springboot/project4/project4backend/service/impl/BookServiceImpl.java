@@ -9,6 +9,7 @@ import com.springboot.project4.project4backend.repository.BookRepository;
 import com.springboot.project4.project4backend.repository.CategoryRepository;
 import com.springboot.project4.project4backend.service.BookService;
 import lombok.AllArgsConstructor;
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

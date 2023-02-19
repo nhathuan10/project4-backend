@@ -1,11 +1,9 @@
 package com.springboot.project4.project4backend.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Blob;
 
 @Data
 @NoArgsConstructor
@@ -34,7 +32,8 @@ public class Book {
     @Column(name = "copiesAvailable", nullable = false)
     private int copiesAvailable;
 
-    @Column(name = "img", nullable = false)
+    @Lob
+    @Column(name = "img", nullable = false, columnDefinition = "CLOB")
     private String img;
 
     @ManyToOne(fetch = FetchType.LAZY)
