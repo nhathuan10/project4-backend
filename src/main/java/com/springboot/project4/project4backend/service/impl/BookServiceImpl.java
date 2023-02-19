@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService {
         book.setAuthor(bookDto.getAuthor());
         book.setDescription(bookDto.getDescription());
         book.setCopies(bookDto.getCopies());
-        book.setCopiesAvailable(bookDto.getCopiesAvailable());
+        book.setCopiesAvailable(bookDto.getCopies());
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
         book.setCategory(category);
         book.setImg(bookDto.getImg());

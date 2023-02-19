@@ -24,7 +24,7 @@ public class BookMapper {
                 .author(bookDto.getAuthor())
                 .description(bookDto.getDescription())
                 .copies(bookDto.getCopies())
-                .copiesAvailable(bookDto.getCopiesAvailable())
+                .copiesAvailable(bookDto.getCopies())
                 .img(bookDto.getImg())
                 .build();
     }
