@@ -32,8 +32,6 @@ public class Book {
     @Column(name = "copiesAvailable", nullable = false)
     private int copiesAvailable;
 
-    @Lob
-    @Column(name = "img", nullable = false, columnDefinition = "CLOB")
     private String img;
 
     @ManyToOne(fetch = FetchType.LAZY)
