@@ -54,4 +54,15 @@ public class BookController {
         bookService.deleteBook(id);
         return new ResponseEntity<>("Book deleted successfully", HttpStatus.OK);
     }
+
+    @GetMapping("/books/find-by-title")
+    public ResponseEntity<BookResponse> getBookByTitle(
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    ){
+        return new ResponseEntity<>(bookService.findBookByTitle(title, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
 }

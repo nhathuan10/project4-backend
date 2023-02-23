@@ -74,4 +74,14 @@ public class BookServiceImpl implements BookService {
     public void deleteBook(long id) {
         bookRepository.deleteById(id);
     }
+
+    @Override
+    public BookResponse findBookByTitle(String title, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Book> books = bookRepository.findByTitle(title, pageable);
+        List<Book> booksList = books.getContent();
+        List<BookDto> content =  booksList.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
+        return new BookResponse(content, books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
+    }
 }
