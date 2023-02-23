@@ -1,6 +1,7 @@
 package com.springboot.project4.project4backend.service.impl;
 
 import com.springboot.project4.project4backend.dto.BookDto;
+import com.springboot.project4.project4backend.dto.BookResponse;
 import com.springboot.project4.project4backend.entity.Book;
 import com.springboot.project4.project4backend.entity.Category;
 import com.springboot.project4.project4backend.exception.ResourceNotFoundException;
@@ -9,7 +10,10 @@ import com.springboot.project4.project4backend.repository.BookRepository;
 import com.springboot.project4.project4backend.repository.CategoryRepository;
 import com.springboot.project4.project4backend.service.BookService;
 import lombok.AllArgsConstructor;
-import org.hibernate.engine.jdbc.BlobProxy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,9 +34,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        return books.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
+    public BookResponse getAllBooks(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Book> books = bookRepository.findAll(pageable);
+        List<Book> booksList = books.getContent();
+        List<BookDto> content =  booksList.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
+        return new BookResponse(content, books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
     }
 
     @Override

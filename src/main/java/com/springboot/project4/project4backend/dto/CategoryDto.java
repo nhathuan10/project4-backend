@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Builder
 public class CategoryDto {
     private long id;
+    @NotEmpty
     private String name;
     private List<BookDto> books = new ArrayList<>();
 }
