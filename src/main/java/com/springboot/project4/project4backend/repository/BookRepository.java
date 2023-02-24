@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-    List<Book> findByCategoryId(long categoryId);
-    Page<Book> findByTitle(String title, Pageable pageable);
+    Page<Book> findByCategoryId(long categoryId, Pageable pageable);
+    Page<Book> findByTitleContaining(String title, Pageable pageable);
 }

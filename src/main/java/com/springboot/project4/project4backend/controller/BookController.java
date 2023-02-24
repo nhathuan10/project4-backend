@@ -35,8 +35,14 @@ public class BookController {
     }
 
     @GetMapping("/categories/{categoryId}/books")
-    public ResponseEntity<List<BookDto>> getBooksByCategoryId(@PathVariable("categoryId") long categoryId){
-        return new ResponseEntity<>(bookService.getBooksByCategoryId(categoryId), HttpStatus.OK);
+    public ResponseEntity<BookResponse> getBooksByCategoryId(
+            @PathVariable("categoryId") long categoryId,
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    ){
+        return new ResponseEntity<>(bookService.getBooksByCategoryId(categoryId, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
     @GetMapping("/books/{id}")

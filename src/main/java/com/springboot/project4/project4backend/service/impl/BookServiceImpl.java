@@ -44,9 +44,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getBooksByCategoryId(long categoryId) {
-        List<Book> books = bookRepository.findByCategoryId(categoryId);
-        return books.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
+    public BookResponse getBooksByCategoryId(long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Book> books = bookRepository.findByCategoryId(categoryId, pageable);
+        List<Book> booksList = books.getContent();
+        List<BookDto> content =  booksList.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
+        return new BookResponse(content, books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
     }
 
     @Override
@@ -79,7 +83,7 @@ public class BookServiceImpl implements BookService {
     public BookResponse findBookByTitle(String title, int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        Page<Book> books = bookRepository.findByTitle(title, pageable);
+        Page<Book> books = bookRepository.findByTitleContaining(title, pageable);
         List<Book> booksList = books.getContent();
         List<BookDto> content =  booksList.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
         return new BookResponse(content, books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());

@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookService {
     BookDto createBook(long categoryId, BookDto bookDto);
     BookResponse getAllBooks(int pageNo, int pageSize, String sortBy, String sortDir);
-    List<BookDto> getBooksByCategoryId(long categoryId);
+    BookResponse getBooksByCategoryId(long categoryId, int pageNo, int pageSize, String sortBy, String sortDir);
     BookDto getBookById(long id);
     BookDto updateBook(long categoryId, long id, BookDto bookDto);
     void deleteBook(long id);
