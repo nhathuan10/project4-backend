@@ -3,6 +3,8 @@ package com.springboot.project4.project4backend.mapper;
 import com.springboot.project4.project4backend.dto.BookDto;
 import com.springboot.project4.project4backend.entity.Book;
 
+import java.util.stream.Collectors;
+
 public class BookMapper {
     public static BookDto mapToDto(Book book){
         return BookDto.builder()
@@ -14,6 +16,7 @@ public class BookMapper {
                 .copiesAvailable(book.getCopiesAvailable())
                 .img(book.getImg())
                 .categoryName(book.getCategory().getName())
+                .reviews(book.getReviews().stream().map(ReviewMapper::mapToDto).collect(Collectors.toList()))
                 .build();
     }
 
@@ -26,6 +29,7 @@ public class BookMapper {
                 .copies(bookDto.getCopies())
                 .copiesAvailable(bookDto.getCopies())
                 .img(bookDto.getImg())
+                .reviews(bookDto.getReviews().stream().map(ReviewMapper::mapToEntity).collect(Collectors.toList()))
                 .build();
     }
 }
