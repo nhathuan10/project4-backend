@@ -7,6 +7,7 @@ import com.springboot.project4.project4backend.utils.AppConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.List;
 public class BookController {
     private BookService bookService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/categories/{categoryId}/books")
     public ResponseEntity<BookDto> createBook(@PathVariable("categoryId") long categoryId, @Valid @RequestBody BookDto bookDto){
         return new ResponseEntity<>(bookService.createBook(categoryId, bookDto), HttpStatus.CREATED);
@@ -50,11 +52,13 @@ public class BookController {
         return new ResponseEntity<>(bookService.getBookById(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("categories/{categoryId}/books/{id}")
     public ResponseEntity<BookDto> updateBook(@PathVariable("categoryId") long categoryId, @PathVariable("id") long id, @Valid @RequestBody BookDto bookDto){
         return new ResponseEntity<>(bookService.updateBook(categoryId, id, bookDto), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/books/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable("id") long id){
         bookService.deleteBook(id);
