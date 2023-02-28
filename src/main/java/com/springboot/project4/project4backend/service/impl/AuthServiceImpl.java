@@ -7,6 +7,7 @@ import com.springboot.project4.project4backend.entity.User;
 import com.springboot.project4.project4backend.exception.APIException;
 import com.springboot.project4.project4backend.repository.RoleRepository;
 import com.springboot.project4.project4backend.repository.UserRepository;
+import com.springboot.project4.project4backend.security.JwtTokenProvider;
 import com.springboot.project4.project4backend.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,13 +28,15 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     public String login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsernameOrEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "User logged-in successfully";
+        String token = jwtTokenProvider.generateToken(authentication);
+        return token;
     }
 
     @Override
