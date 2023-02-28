@@ -15,55 +15,35 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
 @AllArgsConstructor
 public class SecurityConfig {
-//    private UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-//        return configuration.getAuthenticationManager();
-//    }
-
-//    @Bean
-//    protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .authorizeHttpRequests((authorize) ->
-////                        authorize.anyRequest().authenticated()
-//                        authorize.antMatchers("/api/**").permitAll()
-//                                .anyRequest().authenticated()
-//                ).httpBasic(Customizer.withDefaults());
-//
-//        return http.build();
-//    }
-
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/api/auth/**").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
+        http.csrf().disable()
+                .authorizeHttpRequests((authorize) ->
+//                        authorize.anyRequest().authenticated()
+                        authorize.antMatchers(HttpMethod.GET,"/api/**").permitAll()
+                                .antMatchers("/api/auth/**").permitAll()
+                                .anyRequest().authenticated()
+                );
+
         return http.build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
-        UserDetails huan = User.builder().username("huan").password(passwordEncoder().encode("huan")).roles("USER").build();
-        UserDetails admin = User.builder().username("admin").password(passwordEncoder().encode("admin")).roles("ADMIN").build();
-        return new InMemoryUserDetailsManager(huan, admin);
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
+
 }
