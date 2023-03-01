@@ -33,7 +33,7 @@ public class JwtTokenProvider {
     }
 
     // get username from JWT token
-    public String getUsername(String token){
+    public String getUsernameFromToken(String token){
         Claims claims = Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody();
         String username = claims.getSubject();
         return username;
