@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
+
     @Override
-    public User findUserRoles(String usernameOrEmail, String userNameOrEmail) {
+    public User findUserByLoginDTO(String usernameOrEmail, String userNameOrEmail) {
         return userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).get();
     }
 }

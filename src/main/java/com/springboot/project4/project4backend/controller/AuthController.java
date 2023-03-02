@@ -23,8 +23,8 @@ public class AuthController {
         String token = authService.login(loginDto);
         JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
         jwtAuthResponse.setAccessToken(token);
-        jwtAuthResponse.setUserEmail(loginDto.getUsernameOrEmail());
-        jwtAuthResponse.setRoles(userService.findUserRoles(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail()).getRoles());
+        jwtAuthResponse.setUserEmail(userService.findUserByLoginDTO(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail()).getEmail());
+        jwtAuthResponse.setRoles(userService.findUserByLoginDTO(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail()).getRoles());
         return ResponseEntity.ok(jwtAuthResponse);
     }
 
