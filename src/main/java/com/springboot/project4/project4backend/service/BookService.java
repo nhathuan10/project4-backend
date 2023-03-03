@@ -14,4 +14,6 @@ public interface BookService {
     void deleteBook(long id);
     BookResponse findBookByTitle(String title, int pageNo, int pageSize, String sortBy, String sortDir);
     BookDto checkoutBook(String userEmail, long bookId);
+    boolean checkoutBookByUser(String userEmail, long bookId);
+    int currentLoansCount(String userEmail);
 }

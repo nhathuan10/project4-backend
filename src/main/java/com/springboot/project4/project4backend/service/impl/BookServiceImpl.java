@@ -5,6 +5,7 @@ import com.springboot.project4.project4backend.dto.BookResponse;
 import com.springboot.project4.project4backend.entity.Book;
 import com.springboot.project4.project4backend.entity.Category;
 import com.springboot.project4.project4backend.entity.Checkout;
+import com.springboot.project4.project4backend.exception.APIException;
 import com.springboot.project4.project4backend.exception.ResourceNotFoundException;
 import com.springboot.project4.project4backend.mapper.BookMapper;
 import com.springboot.project4.project4backend.repository.BookRepository;
@@ -16,8 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,7 +101,32 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
         Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
         if(validateCheckout != null || book.getCopiesAvailable() <= 0){
-
+            throw new APIException(HttpStatus.BAD_REQUEST, "Book does not exist");
         }
+        book.setCopiesAvailable(book.getCopiesAvailable() - 1);
+        bookRepository.save(book);
+        Checkout checkout = new Checkout();
+        checkout.setUserEmail(userEmail);
+        checkout.setCheckOutDate(LocalDate.now().toString());
+        checkout.setReturnDate(LocalDate.now().plusDays(7).toString());
+        checkout.setBook(book);
+        checkoutRepository.save(checkout);
+        return BookMapper.mapToDto(book);
+    }
+
+    @Override
+    public boolean checkoutBookByUser(String userEmail, long bookId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
+        if(validateCheckout != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int currentLoansCount(String userEmail) {
+        return checkoutRepository.findByUserEmail(userEmail).size();
     }
 }
