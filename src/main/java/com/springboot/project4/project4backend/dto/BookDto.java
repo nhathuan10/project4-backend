@@ -38,4 +38,6 @@ public class BookDto {
     private String categoryName;
 
     private List<ReviewDto> reviews = new ArrayList<>();
+
+    private List<CheckoutDto> checkouts = new ArrayList<>();
 }

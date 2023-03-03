@@ -4,10 +4,12 @@ import com.springboot.project4.project4backend.dto.BookDto;
 import com.springboot.project4.project4backend.dto.BookResponse;
 import com.springboot.project4.project4backend.entity.Book;
 import com.springboot.project4.project4backend.entity.Category;
+import com.springboot.project4.project4backend.entity.Checkout;
 import com.springboot.project4.project4backend.exception.ResourceNotFoundException;
 import com.springboot.project4.project4backend.mapper.BookMapper;
 import com.springboot.project4.project4backend.repository.BookRepository;
 import com.springboot.project4.project4backend.repository.CategoryRepository;
+import com.springboot.project4.project4backend.repository.CheckoutRepository;
 import com.springboot.project4.project4backend.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
     private CategoryRepository categoryRepository;
     private BookRepository bookRepository;
+    private CheckoutRepository checkoutRepository;
+
     @Override
     public BookDto createBook(long categoryId, BookDto bookDto) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", categoryId));
@@ -87,5 +91,14 @@ public class BookServiceImpl implements BookService {
         List<Book> booksList = books.getContent();
         List<BookDto> content =  booksList.stream().map(BookMapper::mapToDto).collect(Collectors.toList());
         return new BookResponse(content, books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
+    }
+
+    @Override
+    public BookDto checkoutBook(String userEmail, long bookId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
+        if(validateCheckout != null || book.getCopiesAvailable() <= 0){
+
+        }
     }
 }

@@ -17,6 +17,7 @@ public class BookMapper {
                 .img(book.getImg())
                 .categoryName(book.getCategory().getName())
                 .reviews(book.getReviews().stream().map(ReviewMapper::mapToDto).collect(Collectors.toList()))
+                .checkouts(book.getCheckouts().stream().map(CheckoutMapper::mapToDto).collect(Collectors.toList()))
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class BookMapper {
                 .copiesAvailable(bookDto.getCopies())
                 .img(bookDto.getImg())
                 .reviews(bookDto.getReviews().stream().map(ReviewMapper::mapToEntity).collect(Collectors.toList()))
+                .checkouts(bookDto.getCheckouts().stream().map(CheckoutMapper::mapToEntity).collect(Collectors.toList()))
                 .build();
     }
 }
