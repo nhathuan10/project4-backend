@@ -2,6 +2,7 @@ package com.springboot.project4.project4backend.controller;
 
 import com.springboot.project4.project4backend.dto.BookDto;
 import com.springboot.project4.project4backend.dto.BookResponse;
+import com.springboot.project4.project4backend.dto.ShelfCurrentLoansResponse;
 import com.springboot.project4.project4backend.entity.Book;
 import com.springboot.project4.project4backend.security.JwtAuthenticationFilter;
 import com.springboot.project4.project4backend.security.JwtTokenProvider;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -100,5 +103,12 @@ public class BookController {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String userEmail = jwtTokenProvider.getUsernameFromToken(token);
         return new ResponseEntity<>(bookService.currentLoansCount(userEmail), HttpStatus.OK);
+    }
+
+    @GetMapping("/books/currentLoans")
+    public ResponseEntity<List<ShelfCurrentLoansResponse>> currentLoans(HttpServletRequest request) throws ParseException {
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String userEmail = jwtTokenProvider.getUsernameFromToken(token);
+        return new ResponseEntity<>(bookService.currentLoans(userEmail), HttpStatus.OK);
     }
 }

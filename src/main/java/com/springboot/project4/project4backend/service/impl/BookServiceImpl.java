@@ -2,6 +2,7 @@ package com.springboot.project4.project4backend.service.impl;
 
 import com.springboot.project4.project4backend.dto.BookDto;
 import com.springboot.project4.project4backend.dto.BookResponse;
+import com.springboot.project4.project4backend.dto.ShelfCurrentLoansResponse;
 import com.springboot.project4.project4backend.entity.Book;
 import com.springboot.project4.project4backend.entity.Category;
 import com.springboot.project4.project4backend.entity.Checkout;
@@ -19,9 +20,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,5 +130,32 @@ public class BookServiceImpl implements BookService {
     @Override
     public int currentLoansCount(String userEmail) {
         return checkoutRepository.findByUserEmail(userEmail).size();
+    }
+
+    @Override
+    public List<ShelfCurrentLoansResponse> currentLoans(String userEmail) throws ParseException {
+        List<ShelfCurrentLoansResponse> shelfCurrentLoansResponses = new ArrayList<>();
+        List<Checkout> checkoutList = checkoutRepository.findByUserEmail(userEmail);
+        List<Long> bookIdList = new ArrayList<>();
+
+        for(Checkout i : checkoutList){
+            bookIdList.add(i.getBook().getId());
+        }
+
+        List<Book> books = bookRepository.findBooksByBookIds(bookIdList);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for(Book book : books){
+            Optional<Checkout> checkout = checkoutList.stream().filter(x -> x.getBook().getId() == book.getId()).findFirst();
+            if(checkout.isPresent()){
+                Date d1 = sdf.parse(checkout.get().getReturnDate());
+                Date d2 = sdf.parse(LocalDate.now().toString());
+                TimeUnit time = TimeUnit.DAYS;
+                long differenceInTime = time.convert(d1.getTime() - d2.getTime(), TimeUnit.MILLISECONDS);
+                BookDto bookDto = BookMapper.mapToDto(book);
+                shelfCurrentLoansResponses.add(new ShelfCurrentLoansResponse(bookDto, (int) differenceInTime));
+            }
+        }
+        return shelfCurrentLoansResponses;
     }
 }
