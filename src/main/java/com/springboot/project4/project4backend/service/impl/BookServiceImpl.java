@@ -100,7 +100,7 @@ public class BookServiceImpl implements BookService {
     public BookDto checkoutBook(String userEmail, long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
         Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
-        if(validateCheckout != null || book.getCopiesAvailable() <= 0){
+        if (validateCheckout != null || book.getCopiesAvailable() <= 0) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Book does not exist");
         }
         book.setCopiesAvailable(book.getCopiesAvailable() - 1);
@@ -118,11 +118,7 @@ public class BookServiceImpl implements BookService {
     public boolean checkoutBookByUser(String userEmail, long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
         Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
-        if(validateCheckout != null){
-            return true;
-        } else {
-            return false;
-        }
+        return validateCheckout != null;
     }
 
     @Override
