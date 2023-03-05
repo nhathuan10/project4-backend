@@ -12,6 +12,4 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findByCategoryId(long categoryId, Pageable pageable);
     Page<Book> findByTitleContaining(String title, Pageable pageable);
-    @Query("select b from Book b where b.id in :book_ids")
-    List<Book> findBooksByBookIds(@Param("book_ids") List<Long> bookIds);
 }

@@ -107,7 +107,7 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
         Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
         if (validateCheckout != null || book.getCopiesAvailable() <= 0) {
-            throw new APIException(HttpStatus.BAD_REQUEST, "Book does not exist");
+            throw new APIException(HttpStatus.BAD_REQUEST, "Book has already checked out or out of stock");
         }
         book.setCopiesAvailable(book.getCopiesAvailable() - 1);
         bookRepository.save(book);
@@ -136,15 +136,8 @@ public class BookServiceImpl implements BookService {
     public List<ShelfCurrentLoansResponse> currentLoans(String userEmail) throws ParseException {
         List<ShelfCurrentLoansResponse> shelfCurrentLoansResponses = new ArrayList<>();
         List<Checkout> checkoutList = checkoutRepository.findByUserEmail(userEmail);
-        List<Long> bookIdList = new ArrayList<>();
-
-        for(Checkout i : checkoutList){
-            bookIdList.add(i.getBook().getId());
-        }
-
-        List<Book> books = bookRepository.findBooksByBookIds(bookIdList);
+        List<Book> books = checkoutList.stream().map(Checkout::getBook).toList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
         for(Book book : books){
             Optional<Checkout> checkout = checkoutList.stream().filter(x -> x.getBook().getId() == book.getId()).findFirst();
             if(checkout.isPresent()){
@@ -157,5 +150,33 @@ public class BookServiceImpl implements BookService {
             }
         }
         return shelfCurrentLoansResponses;
+    }
+
+    @Override
+    public void returnBook(String userEmail, long bookId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
+        if(validateCheckout == null) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "Book was not checked out by user");
+        }
+        book.setCopiesAvailable(book.getCopiesAvailable() + 1);
+        bookRepository.save(book);
+        checkoutRepository.deleteById(validateCheckout.getId());
+    }
+
+    @Override
+    public void renewLoan(String userEmail, long bookId) throws ParseException {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
+        if(validateCheckout == null) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "Book was not checked out by user");
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d1 = sdf.parse(validateCheckout.getReturnDate());
+        Date d2 = sdf.parse(LocalDate.now().toString());
+        if(d1.compareTo(d2) > 0 || d1.compareTo(d2) == 0){
+            validateCheckout.setReturnDate(LocalDate.now().plusDays(8).toString());
+            checkoutRepository.save(validateCheckout);
+        }
     }
 }

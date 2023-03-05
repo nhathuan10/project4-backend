@@ -19,4 +19,6 @@ public interface BookService {
     boolean checkoutBookByUser(String userEmail, long bookId);
     int currentLoansCount(String userEmail);
     List<ShelfCurrentLoansResponse> currentLoans(String userEmail) throws ParseException;
+    void returnBook(String userEmail, long bookId);
+    void renewLoan(String userEmail, long bookId) throws ParseException;
 }

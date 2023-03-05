@@ -105,10 +105,27 @@ public class BookController {
         return new ResponseEntity<>(bookService.currentLoansCount(userEmail), HttpStatus.OK);
     }
 
-    @GetMapping("/books/currentLoans")
+    @GetMapping("/checkouts/currentLoans")
     public ResponseEntity<List<ShelfCurrentLoansResponse>> currentLoans(HttpServletRequest request) throws ParseException {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String userEmail = jwtTokenProvider.getUsernameFromToken(token);
         return new ResponseEntity<>(bookService.currentLoans(userEmail), HttpStatus.OK);
+    }
+
+    @PutMapping("/books/{bookId}/returnBook")
+    public ResponseEntity<String> returnBook(@PathVariable("bookId") long bookId, HttpServletRequest request){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String userEmail = jwtTokenProvider.getUsernameFromToken(token);
+        bookService.returnBook(userEmail, bookId);
+        return new ResponseEntity<>("Book returned successfully", HttpStatus.OK);
+    }
+
+    @PutMapping("/books/{bookId}/renewLoan")
+
+    public ResponseEntity<String> renewLoan(@PathVariable("bookId") long bookId, HttpServletRequest request) throws ParseException {
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String userEmail = jwtTokenProvider.getUsernameFromToken(token);
+        bookService.renewLoan(userEmail, bookId);
+        return new ResponseEntity<>("Book renewed successfully", HttpStatus.OK);
     }
 }
