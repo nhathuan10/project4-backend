@@ -121,7 +121,6 @@ public class BookController {
     }
 
     @PutMapping("/books/{bookId}/renewLoan")
-
     public ResponseEntity<String> renewLoan(@PathVariable("bookId") long bookId, HttpServletRequest request) throws ParseException {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String userEmail = jwtTokenProvider.getUsernameFromToken(token);

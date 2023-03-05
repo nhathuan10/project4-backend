@@ -6,12 +6,14 @@ import com.springboot.project4.project4backend.dto.ShelfCurrentLoansResponse;
 import com.springboot.project4.project4backend.entity.Book;
 import com.springboot.project4.project4backend.entity.Category;
 import com.springboot.project4.project4backend.entity.Checkout;
+import com.springboot.project4.project4backend.entity.History;
 import com.springboot.project4.project4backend.exception.APIException;
 import com.springboot.project4.project4backend.exception.ResourceNotFoundException;
 import com.springboot.project4.project4backend.mapper.BookMapper;
 import com.springboot.project4.project4backend.repository.BookRepository;
 import com.springboot.project4.project4backend.repository.CategoryRepository;
 import com.springboot.project4.project4backend.repository.CheckoutRepository;
+import com.springboot.project4.project4backend.repository.HistoryRepository;
 import com.springboot.project4.project4backend.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,7 @@ public class BookServiceImpl implements BookService {
     private CategoryRepository categoryRepository;
     private BookRepository bookRepository;
     private CheckoutRepository checkoutRepository;
+    private HistoryRepository historyRepository;
 
     @Override
     public BookDto createBook(long categoryId, BookDto bookDto) {
@@ -162,6 +165,15 @@ public class BookServiceImpl implements BookService {
         book.setCopiesAvailable(book.getCopiesAvailable() + 1);
         bookRepository.save(book);
         checkoutRepository.deleteById(validateCheckout.getId());
+        History history = new History();
+        history.setUserEmail(userEmail);
+        history.setCheckoutDate(validateCheckout.getCheckOutDate());
+        history.setReturnedDate(LocalDate.now().toString());
+        history.setTitle(book.getTitle());
+        history.setAuthor(book.getAuthor());
+        history.setDescription(book.getDescription());
+        history.setImg(book.getImg());
+        historyRepository.save(history);
     }
 
     @Override
