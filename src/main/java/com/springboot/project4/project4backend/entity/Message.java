@@ -4,15 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Builder
-@Table(name = "checkouts")
-public class Checkout {
+@Table(name = "messages")
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,13 +22,18 @@ public class Checkout {
     @Column(name = "user_email")
     private String userEmail;
 
-    @Column(name = "checkout_date")
-    private String checkOutDate;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "return_date")
-    private String returnDate;
+    @Column(name = "question")
+    private String question;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @Column(name = "admin_email")
+    private String adminEmail;
+
+    @Column(name = "response")
+    private String response;
+
+    @Column(name = "closed")
+    private boolean closed;
 }

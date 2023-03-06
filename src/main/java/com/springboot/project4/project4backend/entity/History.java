@@ -19,13 +19,13 @@ public class History {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "userEmail")
+    @Column(name = "user_email")
     private String userEmail;
 
-    @Column(name = "checkoutDate")
+    @Column(name = "checkout_date")
     private String checkoutDate;
 
-    @Column(name = "returnedDate")
+    @Column(name = "returned_date")
     private String returnedDate;
 
     @Column(name = "title")
