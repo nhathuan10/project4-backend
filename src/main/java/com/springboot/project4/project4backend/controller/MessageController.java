@@ -34,4 +34,16 @@ public class MessageController {
         String userEmail = jwtTokenProvider.getUsernameFromToken(token);
         return new ResponseEntity<>(messageService.findMessagesByUserEmail(userEmail), HttpStatus.OK);
     }
+
+    @GetMapping("/messages/findByClosed")
+    public ResponseEntity<List<MessageDto>> getMessagesByClosed(@RequestParam(value = "closed", defaultValue = "false", required = false) boolean closed){
+        return new ResponseEntity<>(messageService.findMessagesByClosed(closed), HttpStatus.OK);
+    }
+
+    @PutMapping("/messages/{messageId}")
+    public ResponseEntity<MessageDto> responseMessage(@PathVariable("messageId") long id, @RequestBody MessageDto messageDto, HttpServletRequest request){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String userEmail = jwtTokenProvider.getUsernameFromToken(token);
+        return new ResponseEntity<>(messageService.responseMessage(id, messageDto, userEmail), HttpStatus.OK);
+    }
 }

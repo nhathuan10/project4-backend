@@ -7,4 +7,6 @@ import java.util.List;
 public interface MessageService {
     MessageDto postMessage(MessageDto messageDto, String userEmail);
     List<MessageDto> findMessagesByUserEmail(String userEmail);
+    List<MessageDto> findMessagesByClosed(boolean closed);
+    MessageDto responseMessage(long id, MessageDto messageDto, String userEmail);
 }
