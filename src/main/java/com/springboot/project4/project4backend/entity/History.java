@@ -39,4 +39,7 @@ public class History {
 
     @Column(name = "img")
     private String img;
+
+    @Column(name = "verified")
+    private boolean verified;
 }

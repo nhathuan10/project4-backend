@@ -14,6 +14,7 @@ public class HistoryMapper {
                 .author(history.getAuthor())
                 .description(history.getDescription())
                 .img(history.getImg())
+                .verified(history.isVerified())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public class HistoryMapper {
                 .author(historyDto.getAuthor())
                 .description(historyDto.getDescription())
                 .img(historyDto.getImg())
+                .verified(historyDto.isVerified())
                 .build();
     }
 }
