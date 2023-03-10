@@ -5,7 +5,6 @@ import java.util.List;
 
 public interface HistoryService {
     List<HistoryDto> findAllHistoriesByUser(String userEmail);
-    boolean checkIfBookReturned(String userEmail, long bookId);
     void verifyBookReturned(long historyId);
     List<HistoryDto> findAllHistories();
 }

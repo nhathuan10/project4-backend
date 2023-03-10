@@ -41,11 +41,4 @@ public class HistoryController {
     public ResponseEntity<List<HistoryDto>> findAllHistories(){
         return new ResponseEntity<>(historyService.findAllHistories(), HttpStatus.OK);
     }
-
-    @GetMapping("/histories/checkIfBookReturned")
-    public ResponseEntity<Boolean> checkIfBookReturned(HttpServletRequest request, @RequestParam("bookId") long bookId){
-        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
-        String userEmail = jwtTokenProvider.getUsernameFromToken(token);
-        return new ResponseEntity<>(historyService.checkIfBookReturned(userEmail, bookId), HttpStatus.OK);
-    }
 }

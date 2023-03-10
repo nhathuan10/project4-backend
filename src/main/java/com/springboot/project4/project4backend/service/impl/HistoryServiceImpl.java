@@ -28,13 +28,6 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public boolean checkIfBookReturned(String userEmail, long bookId) {
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id",bookId));
-        History validatedHistory = historyRepository.findByUserEmailAndBookId(userEmail, bookId);
-        return validatedHistory != null;
-    }
-
-    @Override
     public void verifyBookReturned(long historyId) {
         History history = historyRepository.findById(historyId).orElseThrow(() -> new ResourceNotFoundException("History", "id", historyId));
         historyRepository.save(history);
