@@ -174,7 +174,7 @@ public class BookServiceImpl implements BookService {
         history.setAuthor(book.getAuthor());
         history.setDescription(book.getDescription());
         history.setImg(book.getImg());
-        history.setValidated(validateCheckout.getId());
+        history.setCheckout(validateCheckout);
         history.setBookId(book.getId());
         historyRepository.save(history);
     }

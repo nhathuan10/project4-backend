@@ -37,12 +37,11 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public void verifyBookReturned(long historyId) {
         History history = historyRepository.findById(historyId).orElseThrow(() -> new ResourceNotFoundException("History", "id", historyId));
-        history.setVerified(true);
         historyRepository.save(history);
         Book book = bookRepository.findById(history.getBookId()).orElseThrow(() -> new ResourceNotFoundException("Book", "id", history.getBookId()));
         book.setCopiesAvailable(book.getCopiesAvailable() + 1);
         bookRepository.save(book);
-        checkoutRepository.deleteById(history.getValidated());
+        checkoutRepository.deleteById(history.getCheckout().getId());
     }
 
     @Override

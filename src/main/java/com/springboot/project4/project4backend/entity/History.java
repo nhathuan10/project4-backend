@@ -40,10 +40,10 @@ public class History {
     @Column(name = "img")
     private String img;
 
-    @Column(name = "verified")
-    private boolean verified;
-    @Column(name = "validated")
-    private long validated;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "checkout_id", referencedColumnName = "id")
+    private Checkout checkout;
+
     @Column(name = "book_id")
     private long bookId;
 }
