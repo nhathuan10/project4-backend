@@ -162,9 +162,10 @@ public class BookServiceImpl implements BookService {
         if(validateCheckout == null) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Book was not checked out by user");
         }
-        book.setCopiesAvailable(book.getCopiesAvailable() + 1);
-        bookRepository.save(book);
-        checkoutRepository.deleteById(validateCheckout.getId());
+        History validatedHistory = historyRepository.findByUserEmailAndBookId(userEmail, bookId);
+        if(validatedHistory != null){
+            throw new APIException(HttpStatus.BAD_REQUEST, "Book has been returned and waiting for verification");
+        }
         History history = new History();
         history.setUserEmail(userEmail);
         history.setCheckoutDate(validateCheckout.getCheckOutDate());
@@ -173,6 +174,8 @@ public class BookServiceImpl implements BookService {
         history.setAuthor(book.getAuthor());
         history.setDescription(book.getDescription());
         history.setImg(book.getImg());
+        history.setValidated(validateCheckout.getId());
+        history.setBookId(book.getId());
         historyRepository.save(history);
     }
 

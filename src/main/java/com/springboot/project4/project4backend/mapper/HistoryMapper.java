@@ -15,6 +15,8 @@ public class HistoryMapper {
                 .description(history.getDescription())
                 .img(history.getImg())
                 .verified(history.isVerified())
+                .validated(history.getValidated())
+                .bookId(history.getBookId())
                 .build();
     }
 

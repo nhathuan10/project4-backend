@@ -1,8 +1,11 @@
 package com.springboot.project4.project4backend.service.impl;
 import com.springboot.project4.project4backend.dto.HistoryDto;
+import com.springboot.project4.project4backend.entity.Book;
 import com.springboot.project4.project4backend.entity.History;
 import com.springboot.project4.project4backend.exception.ResourceNotFoundException;
 import com.springboot.project4.project4backend.mapper.HistoryMapper;
+import com.springboot.project4.project4backend.repository.BookRepository;
+import com.springboot.project4.project4backend.repository.CheckoutRepository;
 import com.springboot.project4.project4backend.repository.HistoryRepository;
 import com.springboot.project4.project4backend.service.HistoryService;
 import lombok.AllArgsConstructor;
@@ -15,6 +18,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class HistoryServiceImpl implements HistoryService {
     private HistoryRepository historyRepository;
+    private CheckoutRepository checkoutRepository;
+    private BookRepository bookRepository;
 
     @Override
     public List<HistoryDto> findAllHistoriesByUser(String userEmail) {
@@ -23,10 +28,21 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
+    public boolean checkIfBookReturned(String userEmail, long bookId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "id",bookId));
+        History validatedHistory = historyRepository.findByUserEmailAndBookId(userEmail, bookId);
+        return validatedHistory != null;
+    }
+
+    @Override
     public void verifyBookReturned(long historyId) {
         History history = historyRepository.findById(historyId).orElseThrow(() -> new ResourceNotFoundException("History", "id", historyId));
         history.setVerified(true);
-        History savedHistory = historyRepository.save(history);
+        historyRepository.save(history);
+        Book book = bookRepository.findById(history.getBookId()).orElseThrow(() -> new ResourceNotFoundException("Book", "id", history.getBookId()));
+        book.setCopiesAvailable(book.getCopiesAvailable() + 1);
+        bookRepository.save(book);
+        checkoutRepository.deleteById(history.getValidated());
     }
 
     @Override

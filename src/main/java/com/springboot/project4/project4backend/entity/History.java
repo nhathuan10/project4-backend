@@ -42,4 +42,8 @@ public class History {
 
     @Column(name = "verified")
     private boolean verified;
+    @Column(name = "validated")
+    private long validated;
+    @Column(name = "book_id")
+    private long bookId;
 }
