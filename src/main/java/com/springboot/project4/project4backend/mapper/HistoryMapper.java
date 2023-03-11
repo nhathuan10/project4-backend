@@ -14,7 +14,7 @@ public class HistoryMapper {
                 .author(history.getAuthor())
                 .description(history.getDescription())
                 .img(history.getImg())
-                .checkoutId(history.getId())
+                .checkoutId(history.getCheckout().getId())
                 .bookId(history.getBookId())
                 .build();
     }
