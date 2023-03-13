@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Builder
 @Table(name = "categories", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 public class Category {
     @Id
