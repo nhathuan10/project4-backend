@@ -19,9 +19,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageDto postMessage(MessageDto messageDto, String userEmail) {
-        Message message = new Message();
-        message.setTitle(messageDto.getTitle());
-        message.setQuestion(messageDto.getQuestion());
+        Message message = MessageMapper.mapToEntity(messageDto);
         message.setUserEmail(userEmail);
         Message savedMessage = messageRepository.save(message);
         return MessageMapper.mapToDto(savedMessage);
@@ -48,5 +46,11 @@ public class MessageServiceImpl implements MessageService {
         message.setClosed(true);
         Message savedMessage = messageRepository.save(message);
         return MessageMapper.mapToDto(savedMessage);
+    }
+
+    @Override
+    public List<MessageDto> findAllMessages() {
+        List<Message> messages = messageRepository.findAll();
+        return messages.stream().map(MessageMapper::mapToDto).collect(Collectors.toList());
     }
 }

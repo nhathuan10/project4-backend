@@ -9,4 +9,5 @@ public interface MessageService {
     List<MessageDto> findMessagesByUserEmail(String userEmail);
     List<MessageDto> findMessagesByClosed(boolean closed);
     MessageDto responseMessage(long id, MessageDto messageDto, String userEmail);
+    List<MessageDto> findAllMessages();
 }

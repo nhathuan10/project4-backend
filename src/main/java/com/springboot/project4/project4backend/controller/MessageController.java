@@ -40,6 +40,11 @@ public class MessageController {
         return new ResponseEntity<>(messageService.findMessagesByClosed(closed), HttpStatus.OK);
     }
 
+    @GetMapping("/messages")
+    public ResponseEntity<List<MessageDto>> getAllMessages(){
+        return ResponseEntity.ok(messageService.findAllMessages());
+    }
+
     @PutMapping("/messages/{messageId}")
     public ResponseEntity<MessageDto> responseMessage(@PathVariable("messageId") long id, @RequestBody MessageDto messageDto, HttpServletRequest request){
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
