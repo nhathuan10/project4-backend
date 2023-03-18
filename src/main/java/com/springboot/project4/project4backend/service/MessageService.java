@@ -11,4 +11,5 @@ public interface MessageService {
     List<MessageDto> findMessagesByClosed(boolean closed);
     MessageDto responseMessage(long id, MessageDto messageDto, String userEmail);
     MessageResponse getAllMessages(int pageNo, int pageSize, String sortBy, String sortDir);
+    void deleteMessage(long id);
 }

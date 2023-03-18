@@ -62,4 +62,10 @@ public class MessageServiceImpl implements MessageService {
         List<MessageDto> content = messageList.stream().map(MessageMapper::mapToDto).collect(Collectors.toList());
         return new MessageResponse(content, messages.getNumber(), messages.getSize(), messages.getTotalElements(), messages.getTotalPages(), messages.isLast());
     }
+
+    @Override
+    public void deleteMessage(long id) {
+        Message message = messageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Message", "id", id));
+        messageRepository.deleteById(id);
+    }
 }

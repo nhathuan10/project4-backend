@@ -60,4 +60,11 @@ public class MessageController {
         String userEmail = jwtTokenProvider.getUsernameFromToken(token);
         return new ResponseEntity<>(messageService.responseMessage(id, messageDto, userEmail), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/messages/{messageId}")
+    public ResponseEntity<String> deleteMessage(@PathVariable("messageId") long id){
+        messageService.deleteMessage(id);
+        return new ResponseEntity<>("Message deleted successfully", HttpStatus.OK);
+    }
 }
