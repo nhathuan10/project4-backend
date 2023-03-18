@@ -1,12 +1,17 @@
 package com.springboot.project4.project4backend.service.impl;
 
 import com.springboot.project4.project4backend.dto.MessageDto;
+import com.springboot.project4.project4backend.dto.MessageResponse;
 import com.springboot.project4.project4backend.entity.Message;
 import com.springboot.project4.project4backend.exception.ResourceNotFoundException;
 import com.springboot.project4.project4backend.mapper.MessageMapper;
 import com.springboot.project4.project4backend.repository.MessageRepository;
 import com.springboot.project4.project4backend.service.MessageService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,8 +54,12 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDto> findAllMessages() {
-        List<Message> messages = messageRepository.findAll();
-        return messages.stream().map(MessageMapper::mapToDto).collect(Collectors.toList());
+    public MessageResponse getAllMessages(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Message> messages = messageRepository.findAll(pageable);
+        List<Message> messageList = messages.getContent();
+        List<MessageDto> content = messageList.stream().map(MessageMapper::mapToDto).collect(Collectors.toList());
+        return new MessageResponse(content, messages.getNumber(), messages.getSize(), messages.getTotalElements(), messages.getTotalPages(), messages.isLast());
     }
 }
