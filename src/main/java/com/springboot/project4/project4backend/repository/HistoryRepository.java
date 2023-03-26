@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface HistoryRepository extends JpaRepository<History, Long> {
     List<History> findByUserEmail(String userEmail);
-    History findByUserEmailAndBookId(String userEmail, long bookId);
+    History findByVerifiedAndBookId(boolean verified, long bookId);
 }

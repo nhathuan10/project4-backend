@@ -41,4 +41,11 @@ public class HistoryController {
     public ResponseEntity<List<HistoryDto>> findAllHistories(){
         return new ResponseEntity<>(historyService.findAllHistories(), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/histories/{historyId}")
+    public ResponseEntity<String> deleteHistory(@PathVariable("historyId") long id){
+        historyService.deleteHistory(id);
+        return ResponseEntity.ok("History deleted successfully");
+    }
 }

@@ -30,7 +30,4 @@ public class Checkout {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
-
-    @OneToOne(mappedBy = "checkout", cascade = CascadeType.ALL)
-    private History history;
 }

@@ -163,9 +163,9 @@ public class BookServiceImpl implements BookService {
         if(validateCheckout == null) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Book was not checked out by user");
         }
-        History validatedHistory = historyRepository.findByUserEmailAndBookId(userEmail, bookId);
-        if(validatedHistory != null){
-            throw new APIException(HttpStatus.BAD_REQUEST, "Book has been returned and waiting for verification");
+        History checkedHistory = historyRepository.findByVerifiedAndBookId(false, bookId);
+        if (checkedHistory != null) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "Book already checked out and waiting for confirmation");
         }
         History history = new History();
         history.setUserEmail(userEmail);
@@ -175,7 +175,7 @@ public class BookServiceImpl implements BookService {
         history.setAuthor(book.getAuthor());
         history.setDescription(book.getDescription());
         history.setImg(book.getImg());
-        history.setCheckout(validateCheckout);
+        history.setValidated(validateCheckout.getId());
         history.setBookId(book.getId());
         historyRepository.save(history);
     }

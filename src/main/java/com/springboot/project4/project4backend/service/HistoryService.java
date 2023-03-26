@@ -7,4 +7,5 @@ public interface HistoryService {
     List<HistoryDto> findAllHistoriesByUser(String userEmail);
     void verifyBookReturned(long historyId);
     List<HistoryDto> findAllHistories();
+    void deleteHistory(long id);
 }

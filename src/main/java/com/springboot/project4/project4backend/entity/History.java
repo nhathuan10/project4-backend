@@ -40,9 +40,11 @@ public class History {
     @Column(name = "img")
     private String img;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "checkout_id", referencedColumnName = "id")
-    private Checkout checkout;
+    @Column(name = "validated")
+    private long validated;
+
+    @Column(name = "verified")
+    private boolean verified;
 
     @Column(name = "book_id")
     private long bookId;

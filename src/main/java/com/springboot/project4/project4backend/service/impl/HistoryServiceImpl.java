@@ -30,16 +30,23 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public void verifyBookReturned(long historyId) {
         History history = historyRepository.findById(historyId).orElseThrow(() -> new ResourceNotFoundException("History", "id", historyId));
+        history.setVerified(true);
         historyRepository.save(history);
         Book book = bookRepository.findById(history.getBookId()).orElseThrow(() -> new ResourceNotFoundException("Book", "id", history.getBookId()));
         book.setCopiesAvailable(book.getCopiesAvailable() + 1);
         bookRepository.save(book);
-        checkoutRepository.deleteById(history.getCheckout().getId());
+        checkoutRepository.deleteById(history.getValidated());
     }
 
     @Override
     public List<HistoryDto> findAllHistories() {
         List<History> histories = historyRepository.findAll();
         return histories.stream().map(HistoryMapper::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteHistory(long id) {
+        History history = historyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("History", "id", id));
+        historyRepository.deleteById(id);
     }
 }

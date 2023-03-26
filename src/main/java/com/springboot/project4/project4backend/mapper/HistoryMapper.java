@@ -14,7 +14,8 @@ public class HistoryMapper {
                 .author(history.getAuthor())
                 .description(history.getDescription())
                 .img(history.getImg())
-                .checkoutId(history.getCheckout().getId())
+                .validated(history.getValidated())
+                .verified(history.isVerified())
                 .bookId(history.getBookId())
                 .build();
     }

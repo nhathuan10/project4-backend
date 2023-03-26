@@ -15,5 +15,4 @@ public class CheckoutDto {
     private String checkoutDate;
     private String returnDate;
     private long bookId;
-    private HistoryDto history;
 }

@@ -18,6 +18,7 @@ public class HistoryDto {
     private String author;
     private String description;
     private String img;
-    private long checkoutId;
+    private long validated;
+    private boolean verified;
     private long bookId;
 }
