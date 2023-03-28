@@ -44,7 +44,7 @@ public class ReviewController {
     @GetMapping("/reviews")
     public ResponseEntity<ReviewResponse> getAllReviews(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "pageSize", defaultValue = "8", required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
     ){
@@ -56,5 +56,11 @@ public class ReviewController {
     public ResponseEntity<String> deleteReview(@PathVariable("reviewId") long id){
         reviewService.deleteReview(id);
         return ResponseEntity.ok("Review deleted successfully");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/reviews/getReviewsByUserEmail")
+    public ResponseEntity<List<ReviewDto>> getReviewsByUserEmail(@RequestParam("userEmail") String userEmail){
+        return ResponseEntity.ok(reviewService.getReviewsByUserEmail(userEmail));
     }
 }

@@ -1,13 +1,11 @@
 package com.springboot.project4.project4backend.service.impl;
 
-import com.springboot.project4.project4backend.dto.BookResponse;
 import com.springboot.project4.project4backend.dto.ReviewDto;
 import com.springboot.project4.project4backend.dto.ReviewResponse;
 import com.springboot.project4.project4backend.entity.Book;
 import com.springboot.project4.project4backend.entity.Review;
 import com.springboot.project4.project4backend.exception.APIException;
 import com.springboot.project4.project4backend.exception.ResourceNotFoundException;
-import com.springboot.project4.project4backend.mapper.BookMapper;
 import com.springboot.project4.project4backend.mapper.ReviewMapper;
 import com.springboot.project4.project4backend.repository.BookRepository;
 import com.springboot.project4.project4backend.repository.ReviewRepository;
@@ -71,6 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<ReviewDto> getReviewsByUserEmail(String userEmail) {
-        return null;
+        List<Review> reviews = reviewRepository.findByUserEmailContaining(userEmail);
+        return reviews.stream().map(ReviewMapper::mapToDto).collect(Collectors.toList());
     }
 }
