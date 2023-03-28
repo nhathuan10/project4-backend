@@ -22,5 +22,5 @@ public class ReviewDto {
 
     private String description;
 
-    private long bookId;
+    private String bookTitle;
 }

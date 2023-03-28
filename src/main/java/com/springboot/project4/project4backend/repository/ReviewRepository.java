@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findByBookId(long bookId);
     Optional<Review> findByUserEmailAndBookId(String userEmail, long bookId);
+    List<Review> findByUserEmailContaining(String userEmail);
 }

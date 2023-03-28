@@ -14,7 +14,7 @@ public class ReviewMapper {
                 .date(review.getDate())
                 .rating(review.getRating())
                 .description(review.getDescription())
-                .bookId(review.getBook().getId())
+                .bookTitle(review.getBook().getTitle())
                 .build();
     }
 
