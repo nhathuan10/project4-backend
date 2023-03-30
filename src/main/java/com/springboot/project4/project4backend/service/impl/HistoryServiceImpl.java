@@ -1,7 +1,6 @@
 package com.springboot.project4.project4backend.service.impl;
 import com.springboot.project4.project4backend.dto.HistoryDto;
 import com.springboot.project4.project4backend.entity.Book;
-import com.springboot.project4.project4backend.entity.Checkout;
 import com.springboot.project4.project4backend.entity.History;
 import com.springboot.project4.project4backend.exception.ResourceNotFoundException;
 import com.springboot.project4.project4backend.mapper.HistoryMapper;
